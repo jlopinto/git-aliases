@@ -16,6 +16,6 @@
     fi
     ``` 
 
-3. In order to make those alias take effects immediately you can:
+3. In order to make those alias to take effects immediately you can:
     - `source ~/.bashrc` 
     - or simply close and restart your terminal.
