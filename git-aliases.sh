@@ -1,3 +1,7 @@
+get_git_username() {
+    echo 'git config --get user.name'
+}
+
 alias gs='git status'
 alias gb='git branch -vv --sort=-committerdate'
 
@@ -25,7 +29,6 @@ alias gaa='git add -A'
 alias gau='git add -u'
 alias gqp='gau && gc --amend -C HEAD && gpf'
 
-alias gl='git log --graph --decorate --all'
+alias gl="git log --graph --all --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'"
+alias glme="git log --author='$(get_git_username)' --graph --all --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'"
 alias glog='git log --graph --oneline --all --decorate'
-alias glogo='glog `git reflog | cut -c1-7`'
-alias glago="git log --graph --all --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'"
