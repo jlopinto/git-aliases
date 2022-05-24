@@ -32,3 +32,5 @@ alias gqp='gau && gc --amend -C HEAD && gpf'
 alias gl="git log --graph --all --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'"
 alias glme="git log --author='$(get_git_username)' --graph --all --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'"
 alias glog='git log --graph --oneline --all --decorate'
+
+alias gone="!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
