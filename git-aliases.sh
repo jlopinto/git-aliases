@@ -1,3 +1,16 @@
+confirm() {
+    # call with a prompt string or use a default
+    read -r -p "${1:-Are you sure? [y/N]} " response
+    case "$response" in
+        [yY][eE][sS]|[yY])
+            true
+        ;;
+        *)
+            false
+        ;;
+    esac
+}
+
 alias gs='git status'
 alias gb='git branch -vv --sort=-committerdate'
 
@@ -18,6 +31,7 @@ alias gru='git remote update'
 
 alias grh='git reset HEAD'
 alias grH='git reset --hard HEAD'
+alias grHO='confirm && git reset --hard origin/$(git symbolic-ref --short HEAD)'
 
 alias gap='git add -p'
 alias ga='git add'
