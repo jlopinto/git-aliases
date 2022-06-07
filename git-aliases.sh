@@ -37,10 +37,12 @@ alias gap='git add -p'
 alias ga='git add'
 alias gaa='git add -A'
 alias gau='git add -u'
+# "git quick push", useful to amend previous commit with small changes
 alias gqp='gau && gc --amend -C HEAD && gpf'
 
 alias gl="git log --graph --all --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'"
 alias glme="git log --author='$(git config --get user.name)' --graph --all --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'"
 alias glog='git log --graph --oneline --all --decorate'
 
-alias gone="!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
+# remove branches marked as gone
+alias gone="git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D;"
