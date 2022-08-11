@@ -31,7 +31,7 @@ alias gru='git remote update'
 
 alias grh='git reset HEAD'
 alias grH='git reset --hard HEAD'
-alias grHO='confirm && git reset --hard origin/$(git symbolic-ref --short HEAD)'
+alias grHO='confirm "Do you really want to hard reset this branch ? [y/N]" && git reset --hard origin/$(git symbolic-ref --short HEAD)'
 
 alias gap='git add -p'
 alias ga='git add'
