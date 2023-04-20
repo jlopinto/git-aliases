@@ -12,7 +12,7 @@ confirm() {
 }
 
 alias gs='git status'
-alias gb='git branch -vv --sort=-committerdate'
+alias gb="git for-each-ref --sort=-committerdate refs/heads --format='%(authordate:short) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset)%(if)%(upstream)%(then) %(upstream:lstrip=3) %(upstream:track)%(end) - %(color:green)%(committerdate:relative)%(color:reset)'"
 
 alias gpr='git pull --rebase'
 alias gprom='git pull --rebase origin master'
