@@ -18,8 +18,8 @@ alias gpr='git pull --rebase'
 alias gprom='git pull --rebase origin master'
 alias gpf='git push --force-with-lease'
 
-alias gc="git commit -s"
-alias gca="git commit -s --amend"
+alias gc="git commit"
+alias gca="git commit --amend"
 alias gco='git checkout'
 alias gcop='gco -p'
 
