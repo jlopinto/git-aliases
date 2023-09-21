@@ -16,7 +16,7 @@ alias gbl="git for-each-ref --sort=-committerdate refs/heads --format='%(authord
 alias gb="git branch -vv --sort=-committerdate"
 
 alias gpr='git pull --rebase'
-alias gprom='git pull --rebase origin master'
+alias gprom='git pull --rebase origin main'
 alias gpf='git push --force-with-lease'
 
 alias gc="git commit"
