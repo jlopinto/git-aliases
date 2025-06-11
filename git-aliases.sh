@@ -2,17 +2,37 @@ confirm() {
     # call with a prompt string or use a default
     read -r -p "${1:-Are you sure? [y/N]} " response
     case "$response" in
-        [yY][eE][sS]|[yY])
-            true
+    [yY][eE][sS] | [yY])
+        true
         ;;
-        *)
-            false
+    *)
+        false
         ;;
     esac
 }
 
+# Clean git branch list
+gb() {
+    if [ $# -eq 0 ]; then
+        git for-each-ref --sort=-committerdate refs/heads --format='%(authordate:short) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset)%(if)%(upstream)%(then) %(upstream:lstrip=3) %(upstream:track)%(end) - %(color:green)%(committerdate:relative)%(color:reset)'
+    else
+        git branch "$@"
+    fi
+}
+
+# Shrink the current branch by squashing all commits into one
+# Optionally specify the base branch to compare against (default: main)
+gshrink() {
+    base_branch="${1:-main}"
+    commits_range="$(git merge-base "$base_branch" HEAD)..HEAD"
+    count=$(git rev-list --count $commits_range)
+    commit_msgs=$(git log --reverse --pretty=format:'- %s' $commits_range)
+    full_msg="Squash $count commit(s):\n$commit_msgs"
+    git reset --soft "$(git merge-base "$base_branch" HEAD)" &&
+        git commit --edit -m "$full_msg" --no-verify
+}
+
 alias gs='git status'
-alias gb="git for-each-ref --sort=-committerdate refs/heads --format='%(authordate:short) %(color:red)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset)%(if)%(upstream)%(then) %(upstream:lstrip=3) %(upstream:track)%(end) - %(color:green)%(committerdate:relative)%(color:reset)'"
 
 alias gpr='git pull --rebase'
 alias gprom='git pull --rebase origin main'
@@ -43,9 +63,9 @@ alias gau='git add -u'
 
 # "git quick push", useful to amend previous commit with small changes
 alias gqp='gau && gc --amend -C HEAD --no-verify && gpf --no-verify'
-alias gwip='gaa && gc -m "WIP" --no-verify' 
+alias gwip='gaa && gc -m "WIP" --no-verify'
 alias gl="git log --graph --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)<%an>%Creset' --abbrev-commit --date=relative"
-alias glme="git log --author='$(git config --get user.name)' --graph --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)<%an>%Creset' --abbrev-commit --date=relative"
+alias glme="git log --author='$(git config --get user.name)' --graph --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(magenta)<%an>%Creset' --abbrev-commit --date=short"
 
 # remove branches marked as gone
 alias gone="git fetch --all --prune; git branch -vv | awk '/: gone]/{print \$1}' | xargs -r git branch -D"
