@@ -21,9 +21,21 @@ gb() {
 }
 
 # Shrink the current branch by squashing all commits into one
-# Optionally specify the base branch to compare against (default: main)
+# Optionally specify the base branch to compare against (default: auto-detected main/master)
 gshrink() {
-    base_branch="${1:-main}"
+    if [ -z "$1" ]; then
+        # Auto-detect default branch: prefer main, fallback to master
+        if git show-ref --verify --quiet refs/heads/main; then
+            base_branch="main"
+        elif git show-ref --verify --quiet refs/heads/master; then
+            base_branch="master"
+        else
+            echo "Error: Neither 'main' nor 'master' branch found"
+            return 1
+        fi
+    else
+        base_branch="$1"
+    fi
     commits_range="$(git merge-base "$base_branch" HEAD)..HEAD"
     count=$(git rev-list --count $commits_range)
     commit_msgs=$(git log --reverse --pretty=format:'- %s' $commits_range)
@@ -32,14 +44,37 @@ gshrink() {
         git commit --edit -m "$full_msg" --no-verify
 }
 
+# Check that GPG signing works (e.g. before enabling commit.gpgsign)
+gsign() {
+    if echo "test" | gpg --clearsign >/dev/null 2>&1; then
+        echo "GPG signing OK"
+    else
+        echo "GPG signing failed"
+        return 1
+    fi
+}
+
 alias gs='git status'
 
 alias gpr='git pull --rebase'
-alias gprom='git pull --rebase origin main'
+# Auto-detect main/master for pull rebase
+gprom() {
+    if git show-ref --verify --quiet refs/remotes/origin/main; then
+        git pull --rebase origin main
+    elif git show-ref --verify --quiet refs/remotes/origin/master; then
+        git pull --rebase origin master
+    else
+        echo "Error: Neither 'origin/main' nor 'origin/master' found"
+        return 1
+    fi
+}
+
+alias gpros='git pull --rebase origin staging'
 alias gpf='git push --force-with-lease'
 alias gpfn='git push --force-with-lease --no-verify'
 
 alias gc="git commit"
+alias gcm="git commit -eF .git/COMMIT_MSG"
 alias gcn="git commit --no-verify"
 alias gca="git commit --amend"
 alias gco='git checkout'
