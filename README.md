@@ -33,7 +33,7 @@
 | `gb` | List local branches sorted by last commit date, with tracking info. |
 | `gb <args>` | Fallback to plain `git branch <args>`. |
 | `gshrink [base]` | Squash all commits on the current branch since it diverged from `base` (default: `main`) into one. |
-| `git-modified [base]` | List files changed on the current branch compared to `base` (default: `main`). |
+| `gbreport [base]` | List files changed on the current branch compared to `base` (default: `main`). |
 
 ### Aliases
 

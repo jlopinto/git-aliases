@@ -22,6 +22,13 @@ gb() {
     fi
 }
 
+# Show files modified compared to the base branch
+# Usage: gbreport [base]
+gbreport() {
+  local base="${1:-main}"
+  git diff --name-only "$base"...HEAD
+}
+
 # Shrink the current branch by squashing all commits into one
 # Optionally specify the base branch to compare against (default: auto-detected main/master)
 gshrink() {
@@ -44,12 +51,6 @@ gshrink() {
     full_msg="Squash $count commit(s):\n$commit_msgs"
     git reset --soft "$(git merge-base "$base_branch" HEAD)" &&
         git commit --edit -m "$full_msg" --no-verify
-}
-
-# Show files modified compared to the base branch
-git-modified() {
-  local base="${1:-main}"
-  git diff --name-only "$base"...HEAD
 }
 
 # --- Aliases ---
